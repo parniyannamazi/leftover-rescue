@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Leftover Rescue Challenge</title>
+  <meta name="description" content="A playful SDG 12 mini-game about rescuing usable food.">
+  <style>
+    :root{--ink:#17324d;--cream:#fff8e8;--mint:#ccefe3;--green:#2e7d32;--gold:#f6a13a;--red:#d94f4f;--card:#fff;--shadow:0 18px 50px rgba(23,50,77,.14)}
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(145deg,#fff8e8,#e8f7f1);color:var(--ink);font:17px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+    main{max-width:1040px;margin:auto;padding:28px 20px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}.brand{font-weight:900;letter-spacing:.03em}.sdg{background:#bf8b2e;color:#fff;border-radius:14px;padding:10px 15px;font-weight:900;text-align:center;line-height:1}.sdg span{font-size:31px;display:block}
+    .cabinet{background:var(--ink);border-radius:34px;padding:22px;box-shadow:var(--shadow);position:relative}.screen{background:var(--mint);border:7px solid #091f34;border-radius:22px;padding:30px;min-height:520px}.status{display:flex;justify-content:space-between;gap:14px;font-weight:800;margin-bottom:22px}.pill{background:#fff;border:2px solid var(--ink);border-radius:999px;padding:8px 14px}
+    h1{font-size:clamp(2rem,5vw,4rem);line-height:1.02;margin:0 0 10px;letter-spacing:-.04em}.intro{max-width:760px;margin:0 0 26px;font-size:1.08rem}.food{display:grid;grid-template-columns:210px 1fr;gap:24px;align-items:center;background:#fff;border:3px solid var(--ink);border-radius:24px;padding:24px}.avatar{width:210px;height:210px;border-radius:20px;object-fit:cover;border:5px solid var(--ink);background:#fff}.food h2{font-size:2rem;margin:0 0 5px}.question{font-weight:700;margin:0 0 18px}.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}button{appearance:none;border:3px solid var(--ink);background:#fff;color:var(--ink);border-radius:16px;padding:15px;font:inherit;font-weight:850;cursor:pointer;transition:.15s transform,.15s box-shadow}button:hover,button:focus-visible{transform:translateY(-2px);box-shadow:0 6px 0 var(--ink);outline:none}button.primary{background:#fff}
+    .feedback{margin-top:18px;padding:15px 17px;border-radius:14px;background:#eef6ff;font-weight:700}.feedback:empty{display:none}.next{display:block;margin:16px auto 0;background:var(--gold);min-width:210px}.controls{display:flex;justify-content:center;align-items:center;gap:14px;padding:22px 0 2px}.dot{width:32px;height:32px;border-radius:50%;border:3px solid #071f35}.dot:nth-child(1){background:var(--gold)}.dot:nth-child(2){background:var(--green)}.dot:nth-child(3){background:var(--red)}
+    .final{text-align:center;padding:45px 25px 25px}.final .trophy{font-size:80px}.final h2{font-size:2.5rem;margin:4px}.final p{font-size:1.15rem;font-weight:700;max-width:650px;margin:12px auto}.meter{height:20px;background:#d6e1e8;border-radius:99px;overflow:hidden;margin:20px auto;max-width:600px}.meter div{height:100%;background:var(--green);width:0;transition:.5s width}.restart{background:var(--gold);max-width:260px;width:100%}.goal-note,.credits{background:#fff;border:2px solid #c9d7df;border-radius:18px;padding:18px 22px;margin-top:20px}.goal-note h2,.credits h2{font-size:1.15rem;margin:0 0 6px}.goal-note p,.credits p{margin:0}.credits{font-size:.9rem}.credits ul{margin:8px 0 0;padding-left:22px}.credits a{color:#155d68}.foot{text-align:center;margin-top:20px;color:#486071;font-size:.92rem}.hidden{display:none}
+    @media(max-width:680px){main{padding:18px 12px 40px}.screen{padding:18px}.food{grid-template-columns:1fr;text-align:center}.avatar{margin:auto;width:100%;max-width:320px;height:190px}.actions{grid-template-columns:1fr}.status{font-size:.88rem}.cabinet{padding:12px;border-radius:24px}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+  </style>
+</head>
+<body>
+<main>
+  <div class="top"><div class="brand">THE LEFTOVER RESCUE ARCADE</div><div class="sdg"><span>SDG 12</span>RESPONSIBLE<br>CONSUMPTION<br>AND PRODUCTION</div></div>
+  <section class="cabinet" aria-live="polite">
+    <div class="screen">
+      <div class="status"><div class="pill" id="round">MISSION 1 OF 4</div><div class="pill">RESCUE POINTS: <span id="score">0</span></div></div>
+      <div id="game">
+        <h1>Save it before it expires.</h1>
+           <p class="intro"> Choose the best rescue move for each leftover. Every smart choice keeps food out of the bin and saves the resources used to produce it.</p>
+          <img class="avatar" id="avatar" src="assets/banana.jpg" alt="Ripe spotted bananas at a market">
+          <div><h2 id="name">Mission 1: Rescue the Ripe Bananas</h2><p class="question" id="question">These bananas have brown spots but smell fine. What should you do?</p><div class="actions" id="actions"></div><div class="feedback" id="feedback"></div><button class="next hidden" id="next">NEXT MISSION</button></div>
+        </div>
+        <div id="final" class="final hidden"><div class="trophy" id="resultIcon">🏆</div><h2 id="resultTitle">Leftover Legend!</h2><p id="resultText"></p><div class="meter"><div id="meterFill"></div></div><button class="restart" id="restart">PLAY AGAIN</button></div>
+      </div>
+    </div>
+    <div class="controls" aria-hidden="true"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  </section>
+  <section class="goal-note"><h2>What does SDG 12 mean?</h2><p>SDG 12 is the United Nations Sustainable Development Goal for responsible consumption and production. Target 12.3 calls for food waste at retail and consumer levels to be cut in half by 2030.</p></section>
+  <section class="credits"><h2>Photo credits</h2><ul>
+    <li>Banana photo via <a href="https://www.pexels.com/photo/27924819/" target="_blank" rel="noopener">Pexels photo 27924819</a>; photographer name was not supplied with the image link.</li>
+    <li>Bread photo by STAFFAGE via <a href="https://www.pexels.com/photo/6195/" target="_blank" rel="noopener">Pexels photo 6195</a>.</li>
+    <li>Rice photo by Robert Moutongoh via <a href="https://www.pexels.com/photo/a-bowl-of-cooked-rice-8923092/" target="_blank" rel="noopener">Pexels</a>.</li>
+    <li>Carrot photo by Nick Collins via <a href="https://www.pexels.com/photo/fill-the-frame-photography-of-carrots-1306559/" target="_blank" rel="noopener">Pexels</a>.</li>
+  </ul></section>
+  <p class="foot">Sources: United Nations SDG 12 and the United Nations Environment Programme Food Waste Index Report 2024.</p>
+</main>
+<script>
+const missions=[
+ {image:'assets/banana.jpg',alt:'Ripe spotted bananas at a market',name:'Mission 1: Rescue the Ripe Bananas',q:'These bananas have brown spots but smell fine. What should you do?',choices:['Throw them away','Leave them until they spoil','Blend and freeze them','Buy a new bunch'],answer:2,tip:'Brown spots often mean sweetness. Blend the bananas into a smoothie or freeze slices for later.'},
+ {image:'assets/bread.jpg',alt:'Assorted sliced bread on a serving tray',name:'Mission 2: Give Stale Bread a Second Chance',q:'The bread is stale, but there is no visible mould. What is its best comeback?',choices:['Toast it for croutons','Compost it immediately','Throw out the whole loaf','Hide it at the back'],answer:0,tip:'Stale bread can become toast, croutons, breadcrumbs, or French toast. Bread with visible mould should be discarded.'},
+ {image:'assets/rice.jpg',alt:'Cooked white rice in a bowl',name:"Mission 3: Give Yesterday's Rice a Second Life",q:'The rice was refrigerated promptly after cooking and is left from yesterday. What is the smart move?',choices:['Leave it out overnight','Keep it warm all week','Throw it away automatically','Reheat once until steaming'],answer:3,tip:'Properly cooled rice can become a quick rice bowl. Reheat it thoroughly until steaming and avoid reheating it more than once.'},
+ {image:'assets/vegetables.jpg',alt:'Fresh carrots with leafy green tops',name:'Mission 4: Save the Soft Carrot',q:'A carrot is soft but has no visible mould or bad smell. How can you rescue it?',choices:['Discard every vegetable nearby','Add it to soup','Buy a replacement first','Ignore it for another week'],answer:1,tip:'Soft carrots work well in soup, curry, stock, or a blended sauce.'}
+];
+let index=0,score=0,locked=false;
+const $=id=>document.getElementById(id);
+function render(){const m=missions[index];$('round').textContent=`MISSION ${index+1} OF ${missions.length}`;$('score').textContent=score;$('avatar').src=m.image;$('avatar').alt=m.alt;$('name').textContent=m.name;$('question').textContent=m.q;$('feedback').textContent='';$('next').classList.add('hidden');$('next').textContent=index===missions.length-1?'SEE MY SCORE':'NEXT MISSION';$('actions').innerHTML='';locked=false;m.choices.forEach((choice,choiceIndex)=>{const b=document.createElement('button');b.textContent=choice;b.onclick=()=>choose(choiceIndex,b);$('actions').appendChild(b)})}
+function choose(choice,button){if(locked)return;locked=true;const m=missions[index];const buttons=[...document.querySelectorAll('#actions button')];buttons.forEach(b=>b.disabled=true);buttons[m.answer].style.background='#9ee3a5';if(choice===m.answer){score+=25;$('feedback').textContent='Correct! '+m.tip}else{button.style.background='#f4a6a6';$('feedback').textContent='Not quite. '+m.tip}$('score').textContent=score;$('next').classList.remove('hidden')}
+function nextMission(){index++;index<missions.length?render():finish()}
+function finish(){$('game').classList.add('hidden');$('final').classList.remove('hidden');$('round').textContent='CHALLENGE COMPLETE';if(score===100){$('resultIcon').textContent='🏆';$('resultTitle').textContent='Perfect Rescue!';$('resultText').textContent='Amazing job—you got every answer correct and saved every leftover! You are officially a Leftover Legend.';$('restart').textContent='PLAY AGAIN'}else if(score===0){$('resultIcon').textContent='🌱';$('resultTitle').textContent='Ready for Another Try?';$('resultText').textContent='You did not rescue any leftovers this time, but every expert starts somewhere. Try again and use the tips to improve your score!';$('restart').textContent='TRY AGAIN'}else{$('resultIcon').textContent='⭐';$('resultTitle').textContent='Good Rescue Effort!';$('resultText').textContent=`You earned ${score} points and rescued ${score/25} out of ${missions.length} leftovers. Try again and see if you can save them all!`;$('restart').textContent='TRY AGAIN'}requestAnimationFrame(()=>$('meterFill').style.width=score+'%')}
+$('restart').onclick=()=>{index=0;score=0;$('game').classList.remove('hidden');$('final').classList.add('hidden');$('meterFill').style.width='0';render()};render();
+$('next').onclick=nextMission;
+</script>
+</body>
+</html>
